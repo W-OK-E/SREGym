@@ -49,6 +49,7 @@ def run_preflight_check(
     }
 
     module_path = agent_driver_modules.get(agent_name)
+    print("The module path is:", module_path)
     if not module_path:
         return
 
