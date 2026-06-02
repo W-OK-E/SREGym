@@ -79,6 +79,7 @@ from sregym.conductor.problems.update_incompatible_correlated import UpdateIncom
 from sregym.conductor.problems.valkey_auth_disruption import ValkeyAuthDisruption
 from sregym.conductor.problems.valkey_memory_disruption import ValkeyMemoryDisruption
 from sregym.conductor.problems.workload_imbalance import WorkloadImbalance
+from sregym.conductor.problems.workload_scaling_anomaly import WorkloadScalingAnomaly
 from sregym.conductor.problems.wrong_bin_usage import WrongBinUsage
 from sregym.conductor.problems.wrong_dns_policy import WrongDNSPolicy
 from sregym.conductor.problems.wrong_service_selector import WrongServiceSelector
@@ -297,6 +298,7 @@ class ProblemRegistry:
             "operator_security_context_fault": K8SOperatorSecurityContextFault,
             "operator_wrong_update_strategy_fault": K8SOperatorWrongUpdateStrategyFault,
             "operator_wrong_operator_image": K8SOperatorWrongOperatorImage,
+            "workload_scaling_anomaly_social_network": lambda: WorkloadScalingAnomaly(),
         }
 # fmt: on
         self.kubectl = KubeCtl()
