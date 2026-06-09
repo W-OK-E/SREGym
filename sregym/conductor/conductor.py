@@ -600,6 +600,16 @@ class Conductor:
         except Exception as e:
             self.logger.warning(f"Could not fix Calico IPPool state: {e}")
 
+        self.logger.info("[FIX] MissingImagePullSecret containerd dockerhub-block leftover if any")
+        try:
+            from sregym.conductor.problems.missing_image_pull_secret_hotel_reservation import (
+                MissingImagePullSecretHotelReservation,
+            )
+
+            MissingImagePullSecretHotelReservation.cleanup_leftovers()
+        except Exception as e:
+            self.logger.warning(f"Could not clean up MissingImagePullSecret leftovers: {e}")
+
         self.logger.info("[FIX] Stale CoreDNS NXDOMAIN templates if any")
         injector = VirtualizationFaultInjector(namespace="kube-system")
         try:
@@ -744,8 +754,7 @@ class Conductor:
     def _ensure_openebs_device_storageclass(self) -> None:
         self.logger.info("[DEPLOY] Ensuring OpenEBS LocalPV-Device StorageClass…")
         existing = self.kubectl.exec_command(
-            "kubectl get storageclass openebs-device "
-            "-o jsonpath='{.provisioner}{\"\\n\"}{.volumeBindingMode}'"
+            "kubectl get storageclass openebs-device -o jsonpath='{.provisioner}{\"\\n\"}{.volumeBindingMode}'"
         )
         if "not found" not in existing.lower() and "error from server" not in existing.lower():
             provisioner, _, volume_binding_mode = existing.partition("\n")
